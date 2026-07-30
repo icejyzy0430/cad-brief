@@ -175,6 +175,14 @@ python -m unittest discover -s tests -v
 
 两者仅通过 Markdown 需求包交接，不共享代码或运行时。
 
+## 致谢
+
+特别感谢 [`earthtojake/text-to-cad`](https://github.com/earthtojake/text-to-cad)。
+它提供的 STEP-first 参数化 CAD 工作流为 `cad-brief` 带来了关键设计思路；实际使用中，
+从 build123d 源码、STEP 生成到几何检查、快照和修复的完整闭环也非常好用。
+
+`cad-brief` 希望在这套优秀工具的基础上，为新手补上建模前的需求准备环节。
+
 <br>
 
 ---
