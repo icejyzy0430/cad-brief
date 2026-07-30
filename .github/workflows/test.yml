@@ -20,15 +20,15 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Run unit tests
-        run: python -m unittest discover -s tests -v
+        run: python -B -m unittest discover -s tests -v
 
       - name: Validate ready fixture in isolated mode
         run: >-

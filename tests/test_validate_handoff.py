@@ -13,6 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "cad-brief" / "scripts" / "validate_handoff.py"
 FIXTURES = ROOT / "tests" / "fixtures"
 
+# Test discovery imports the validator before the package-cleanliness test runs.
+# Prevent that import from creating a cache inside the skill under test.
+sys.dont_write_bytecode = True
 SPEC = importlib.util.spec_from_file_location("cad_brief_validate_handoff", SCRIPT)
 assert SPEC is not None and SPEC.loader is not None
 VALIDATOR = importlib.util.module_from_spec(SPEC)
