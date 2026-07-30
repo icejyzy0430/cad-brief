@@ -1,0 +1,7 @@
+interface:
+  display_name: "CAD Brief"
+  short_description: "Prepare evidence-backed CAD requirements for Text-to-CAD"
+  default_prompt: "Use $cad-brief to turn my idea and references into a ready-to-use CAD requirements package."
+
+policy:
+  allow_implicit_invocation: false

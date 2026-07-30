@@ -1,0 +1,63 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.10", "3.12"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Validate ready fixture in isolated mode
+        run: >-
+          python -I cad-brief/scripts/validate_handoff.py
+          tests/fixtures/ready/mounting_plate.cad-requirements.md
+          --strict
+
+      - name: Validate provisional fixture
+        run: >-
+          python cad-brief/scripts/validate_handoff.py
+          tests/fixtures/provisional/camera_body.cad-requirements.md
+          --strict
+
+      - name: Validate blocked fixture
+        run: >-
+          python cad-brief/scripts/validate_handoff.py
+          tests/fixtures/blocked/exact_photo_fit.cad-requirements.md
+          --strict
+
+      - name: Confirm invalid fixture is rejected
+        shell: python
+        run: |
+          import subprocess
+          import sys
+
+          result = subprocess.run([
+              sys.executable,
+              "cad-brief/scripts/validate_handoff.py",
+              "tests/fixtures/invalid/missing_prompt.cad-requirements.md",
+          ])
+          if result.returncode != 1:
+              raise SystemExit(f"expected exit 1, got {result.returncode}")
