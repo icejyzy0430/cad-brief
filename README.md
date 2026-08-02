@@ -61,6 +61,19 @@ Copy-Item -Recurse .\cad-brief\cad-brief "$HOME\.codex\skills\cad-brief"
 如果你已有完整的尺寸、接口和验收条件，可以直接使用 `$cad`。`cad-brief` 的价值
 在于资料不完整时，先确定“究竟应该建什么”，避免精确验证一份遗漏了关键要求的规格。
 
+## 🧪 两个真实任务，Skill 到底补了什么
+
+两个案例都只用了 **0 轮追问**：已有信息一次收齐后，Agent 主动研究公开资料，再把证据、推导、假设和验收目标写进需求包。
+
+<table>
+<tr><th width="50%">佳能 AT-1：有参考图，没有可靠尺寸</th><th width="50%">原创折叠四旋翼：有目标概念，没有结构规格</th></tr>
+<tr><td valign="top"><img src="assets/examples/canon-at1.png" alt="佳能 AT-1 需求包交给 Text-to-CAD 后的模型审阅图" width="100%"></td><td valign="top"><img src="assets/examples/folding-quadcopter.gif" alt="折叠四旋翼需求包交给 Text-to-CAD 后的机构动画" width="100%"></td></tr>
+<tr><td valign="top"><strong>研究：</strong>从 Canon Camera Museum 核实机身 <code>141 × 87 × 48 mm</code>，以及 FD 50mm f/1.4 S.S.C. 镜头 <code>Ø67 × 49 mm</code>、滤镜 <code>Ø55 mm</code>；再用 10 张同尺度视图标定轮廓、光轴和附件尺寸。<br><br><strong>落地：</strong>13 个来源、8 条 <code>REQ</code>、10 条 <code>VIS</code>；官方尺寸与图像估算分开记录，状态诚实标为 <code>provisional</code>。</td><td valign="top"><strong>研究：</strong>用 DJI 的折叠比例、Autel 的紧凑布局与收展顺序、Parrot 的窄长折叠拓扑建立设计语境；再从公开机械专利提炼“铰座 → 销轴 → 机臂 → 远端电机 → 锁止”的机构链。<br><br><strong>落地：</strong>8 个来源、15 条 <code>REQ</code>、6 条 <code>VIS</code>；推导 <code>111.521 mm</code> 机臂半径和 <code>140.46°</code> 折叠角，最终形成原创、可动画、可验收的 <code>ready</code> 需求包。</td></tr>
+<tr><td><a href="examples/canon-at1.cad-requirements.md">查看完整佳能需求包</a></td><td><a href="examples/folding_quadcopter.cad-requirements.md">查看完整无人机需求包</a></td></tr>
+</table>
+
+<p align="center"><sub><code>cad-brief</code> 只生成需求和交接提示；图中几何由需求包交给 <code>$cad</code> 后生成。品牌名称仅用于标明公开研究来源，不表示隶属或认可，也没有使用第三方 CAD。</sub></p>
+
 ## ⚡ 看一眼就能用
 
 - 完整规格可以零追问；信息不足时，整个任务最多两轮问询。
@@ -132,20 +145,9 @@ python cad-brief/scripts/validate_handoff.py path/to/model.cad-requirements.md -
 
 ## 📦 安装与兼容性
 
-下载或克隆本仓库，只把内层 `cad-brief/` 复制到 Codex Skills 目录；不要复制仓库
-外层的测试和 CI 文件。
-
-macOS / Linux：
-
-```bash
-cp -R cad-brief ~/.codex/skills/cad-brief
-```
-
-Windows PowerShell：
-
-```powershell
-Copy-Item -Recurse cad-brief "$HOME\.codex\skills\cad-brief"
-```
+下载或克隆仓库后，只复制内层 `cad-brief/`：macOS / Linux 使用
+`cp -R cad-brief ~/.codex/skills/cad-brief`，Windows PowerShell 使用
+`Copy-Item -Recurse cad-brief "$HOME\.codex\skills\cad-brief"`。
 
 - Python validator：Python 3.10 或更高版本。
 - TTC 交接字段按 `earthtojake/text-to-cad` 0.3.9 的公开 Skill 契约设计；当前测试不包含端到端 STEP 生成。
@@ -166,16 +168,10 @@ Copy-Item -Recurse cad-brief "$HOME\.codex\skills\cad-brief"
 
 ## 📚 文档与验证
 
-- [完整 Skill 工作流](cad-brief/SKILL.md)
-- [需求包模板](cad-brief/assets/cad-requirements-template.md)
-- [公开测试](tests/)
-- [安全策略](SECURITY.md)
+[完整工作流](cad-brief/SKILL.md) · [需求包模板](cad-brief/assets/cad-requirements-template.md) ·
+[真实案例](examples/) · [公开测试](tests/) · [安全策略](SECURITY.md)
 
-运行全部测试：
-
-```bash
-python -m unittest discover -s tests -v
-```
+运行全部测试：`python -m unittest discover -s tests -v`
 
 两者仅通过 Markdown 需求包交接，不共享代码或运行时。
 
