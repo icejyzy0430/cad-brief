@@ -44,7 +44,11 @@ class SkillPackageTests(unittest.TestCase):
     def test_repo_markdown_local_links_resolve(self) -> None:
         for path in (ROOT / "README.md", ROOT / "SECURITY.md"):
             text = path.read_text(encoding="utf-8")
-            for target in re.findall(r"\[[^\]]+\]\(([^)]+)\)", text):
+            markdown_targets = re.findall(r"\[[^\]]+\]\(([^)]+)\)", text)
+            html_image_targets = re.findall(
+                r'<img\b[^>]*\bsrc=["\']([^"\']+)["\']', text
+            )
+            for target in markdown_targets + html_image_targets:
                 if re.match(r"(?:https?://|#)", target):
                     continue
                 self.assertTrue((path.parent / target).resolve().exists(), f"{path}: {target}")

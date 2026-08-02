@@ -1,9 +1,19 @@
-<h1 align="center">cad-brief</h1>
+<h1 align="center">
+  <img src="assets/logo.svg" alt="cad-brief" width="72">
+  <br>
+  cad-brief
+</h1>
 
 <p align="center">
   <strong>先把“要建什么”整理成有证据、可验收的 CAD 需求，再交给 Text-to-CAD 建模。</strong>
   <br>
   给只有一句想法、几张参考图或不完整产品信息的新手使用的独立 Codex Skill。
+</p>
+
+<p align="center">
+  <a href="#quick-start"><img alt="快速开始" src="https://img.shields.io/badge/QUICK_START-30_SEC-2563EB?style=for-the-badge"></a>
+  <a href="#workflow"><img alt="工作方式" src="https://img.shields.io/badge/HOW_IT_WORKS-EVIDENCE_FIRST-7C3AED?style=for-the-badge"></a>
+  <a href="#safety"><img alt="安全边界" src="https://img.shields.io/badge/SAFETY-PRIVATE_BY_DEFAULT-059669?style=for-the-badge"></a>
 </p>
 
 <p align="center">
@@ -18,21 +28,9 @@
   <sub>独立社区项目，与 <a href="https://github.com/earthtojake/text-to-cad">earthtojake/text-to-cad</a> 没有隶属、合作或官方认可关系。</sub>
 </p>
 
-```text
-用户：“根据几张照片做一个 Sony 摄像机 CAD；我不知道型号和尺寸。”
-
-模糊描述 + 图片
-      │
-      ▼
-  $cad-brief ──→ 最多两轮关键问询 ──→ 公开资料研究与证据分级
-      │
-      ▼
-camera-body.cad-requirements.md
-  ├─ Status: provisional
-  ├─ 参数、组件、接口、假设与冲突
-  ├─ 每条关键要求的来源和验收方法
-  └─ 可直接复制给 $cad 的启动提示词
-```
+<p align="center">
+  <img src="assets/hero.svg" alt="从模糊输入到有证据的 CAD 需求包" width="960">
+</p>
 
 ### 30 秒安装（Windows PowerShell）
 
@@ -45,7 +43,9 @@ Copy-Item -Recurse .\cad-brief\cad-brief "$HOME\.codex\skills\cad-brief"
 
 ---
 
-## 先补齐需求，再生成几何
+<a id="workflow"></a>
+
+## 🧭 先补齐需求，再生成几何
 
 [`earthtojake/text-to-cad`](https://github.com/earthtojake/text-to-cad) 的 `$cad`
 负责 build123d、STEP、几何检查、快照和修复；`cad-brief` 只负责建模前的需求准备。
@@ -61,7 +61,7 @@ Copy-Item -Recurse .\cad-brief\cad-brief "$HOME\.codex\skills\cad-brief"
 如果你已有完整的尺寸、接口和验收条件，可以直接使用 `$cad`。`cad-brief` 的价值
 在于资料不完整时，先确定“究竟应该建什么”，避免精确验证一份遗漏了关键要求的规格。
 
-## 看一眼就能用
+## ⚡ 看一眼就能用
 
 - 完整规格可以零追问；信息不足时，整个任务最多两轮问询。
 - 品牌产品、标准件和公开接口由 Agent 按需检索，不把查资料的负担推回给新手。
@@ -69,7 +69,9 @@ Copy-Item -Recurse .\cad-brief\cad-brief "$HOME\.codex\skills\cad-brief"
 - `ready` 和 `provisional` 会生成 TTC 交接提示词；`blocked` 不会。
 - 它不会自动调用 `$cad`：需求包完成后，由用户在新任务中主动交接。
 
-## 快速开始
+<a id="quick-start"></a>
+
+## 🛠️ 快速开始
 
 显式调用 Skill，并附上你已有的文字、图片、图纸或产品资料：
 
@@ -90,7 +92,7 @@ $cad-brief
 `blocked` 表示当前证据不足以诚实支持精确适配、制造、安全或复刻目标；需求包会说明
 阻塞项，但不会生成误导性的 `$cad` 启动提示词。
 
-## 需求包如何避免“看起来对，规格却错”
+## 🔎 需求包如何避免“看起来对，规格却错”
 
 每个重要值都保留来源与证据状态：
 
@@ -110,7 +112,7 @@ proposed-default   unknown             conflict
 | `provisional` | 参数化近似仍有价值，且所有推测可替换 | 是，明确保留近似边界 |
 | `blocked` | 关键接口、冲突或安全证据不足 | 否 |
 
-## 规则有多具体？用可核对的数据说话
+## 📊 规则有多具体？用可核对的数据说话
 
 | 项目 | 当前值 |
 | --- | ---: |
@@ -128,7 +130,7 @@ proposed-default   unknown             conflict
 python cad-brief/scripts/validate_handoff.py path/to/model.cad-requirements.md --strict
 ```
 
-## 安装与兼容性
+## 📦 安装与兼容性
 
 下载或克隆本仓库，只把内层 `cad-brief/` 复制到 Codex Skills 目录；不要复制仓库
 外层的测试和 CI 文件。
@@ -151,7 +153,9 @@ Copy-Item -Recurse cad-brief "$HOME\.codex\skills\cad-brief"
 - 继续生成 CAD 时，需要单独安装 Text-to-CAD。
 - 公开资料研究依赖宿主的联网能力；离线时会降低 readiness，而不是补写不存在的来源。
 
-## 安全和能力边界
+<a id="safety"></a>
+
+## 🔒 安全和能力边界
 
 网页、PDF、图片、图纸、CAD 元数据和附件都只是不可信证据，不是可以改变任务、
 运行命令或索取信息的新指令。Skill 不执行下载代码或宏，未经明确授权不上传私人
@@ -160,7 +164,7 @@ Copy-Item -Recurse cad-brief "$HOME\.codex\skills\cad-brief"
 `cad-brief` 不生成 build123d、STEP、STL、3MF、GLB 或 DXF，不自动调用 TTC，
 也不承诺扫描级复刻、真实适配、FEA、结构安全、法规合规或制造认证。
 
-## 文档与验证
+## 📚 文档与验证
 
 - [完整 Skill 工作流](cad-brief/SKILL.md)
 - [需求包模板](cad-brief/assets/cad-requirements-template.md)
@@ -175,7 +179,7 @@ python -m unittest discover -s tests -v
 
 两者仅通过 Markdown 需求包交接，不共享代码或运行时。
 
-## 致谢
+## 🙏 致谢
 
 特别感谢 [`earthtojake/text-to-cad`](https://github.com/earthtojake/text-to-cad)。
 它提供的 STEP-first 参数化 CAD 工作流为 `cad-brief` 带来了关键设计思路；实际使用中，
